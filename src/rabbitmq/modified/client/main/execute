@@ -1,0 +1,48 @@
+clear
+
+source ~/.cshrc
+export GOPATH=$GOPATH:/Users/nsr/Dropbox/go:/Users/nsr/Dropbox/go/adaptive
+export GO111MODULE=off
+cd /Users/nsr/Dropbox/go/adaptive/src/rabbitmq/modified/client/main
+
+echo "Compiling main.go"
+go build main.go
+
+#echo "Executing "$1" client(s)/Fibonacci("$3")/"$4 "invocations"
+
+fibonacciNumber=$1
+sampleSize=$2
+meanRequestTime=$3
+stdDevMeanRequestTime=$4
+
+#echo "fibonacci(N)                 : "$N
+#echo "Sample size                  : "$sampleSize
+#echo "Mean 'request interval time' : "$mean
+#echo "StD 'request interval time'  : "$stdMean
+
+#for numberOfClients in {1,25,50,100,125,100,50,25,1}
+for numberOfClients in {100..100}
+#for x in {1..30}
+# do
+#for numberOfClients in {1..1}
+#for numberOfClients in {1,5,25,50,25,5,1}
+  do
+    clientId=1
+    ((i=numberOfClients))
+    while [ $clientId -le $i ]
+      do
+        ./main -client-id=$clientId $fibonacciNumber $sampleSize $meanRequestTime stdDevMeanRequestTime &
+        PROCS[$clientId]=$!
+        ((clientId=clientId+1))
+      done
+
+      clientId=1
+      while [ $clientId -le $i ]
+        do
+          wait ${PROCS[$clientId]}
+          ((clientId=clientId+1))
+        done
+#        ((i=i+5))
+#  done
+done
+echo "*********** DONE ************"
