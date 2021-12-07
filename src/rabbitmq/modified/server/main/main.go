@@ -20,6 +20,8 @@ func main() {
 	// create new server
 	var server = server.NewServer(*isAdaptivePtr, *controllerTypePtr, *prefetchCountInitialPtr, *monitorIntervalPtr, *setPoint, *kp)
 
+	fmt.Println("HERE")
+
 	// execute server
 	fmt.Println("Server is running ...")
 	server.Run()
